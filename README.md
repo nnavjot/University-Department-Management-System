@@ -23,7 +23,6 @@ This project is a Python-based management system designed to track students, pro
 1.  **Clone the Repository:**
     ```bash
     git clone [https://github.com/nnavjot/University-Department-Management-System.git](https://github.com/nnavjot/University-Department-Management-System.git)
-cd University-Department-Management-System
     ```
 2.  **Navigate to the Directory:**
     ```bash
