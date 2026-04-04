@@ -1,14 +1,10 @@
-"""
-This module provides the interactive terminal interface for the user
-to interact with the University Department System.
-"""
+
 
 from models import Student, Professor, Course
 from department import Department
 
 
 def display_menu():
-    """Displays the interactive menu choices."""
     print("\n" + "=" * 35)
     print(" UNIVERSITY DEPARTMENT SYSTEM")
     print("=" * 35)
@@ -22,7 +18,6 @@ def display_menu():
 
 
 def select_course(dept):
-    """Displays courses as a numbered menu and returns the selected course object."""
     if not dept.courses:
         print("\nNo courses are currently available in the system.")
         return None
@@ -46,7 +41,6 @@ def select_course(dept):
 
 
 def select_student(dept):
-    """Displays students as a numbered menu and returns selected student object."""
     if not dept.students:
         print("\nNo students are currently available in the system.")
         return None
@@ -67,7 +61,6 @@ def select_student(dept):
 
 
 def main():
-    """Executes the main loop of the terminal application."""
     cs_dept = Department("Computer Science")
     
     while True:
@@ -153,7 +146,6 @@ def main():
                 try:
                     grade_val = float(grade_input)
                     student.assign_grade(selected_course_code, grade_val)
-                    # Trigger an auto-save because state changed!
                     cs_dept.save_all_data()
                     print(f"Grade of {grade_val}% recorded successfully for {student.name}!")
                 except ValueError:
