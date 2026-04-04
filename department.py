@@ -1,53 +1,37 @@
-"""
-This module contains the Department class, which manages the collections
-of students, professors, and courses, and handles automated CSV interactions.
-"""
-
 import csv
 import os
 from models import Student, Professor, Course
 
 
 class Department:
-    """Manages students, professors, and courses within a department."""
 
     def __init__(self, dept_name):
-        """Initializes the department and automatically loads existing data."""
         self.dept_name = dept_name
         self.students = {}
         self.professors = {}
         self.courses = {}
         
-        # Files for auto-saving
         self.students_file = "students.csv"
         self.professors_file = "professors.csv"
         self.courses_file = "courses.csv"
         
-        # Load data on system start
         self.load_all_data()
 
     def add_student(self, student):
-        """Adds a student and triggers auto-save."""
         self.students[student.student_id] = student
         self.save_all_data()
 
     def add_professor(self, professor):
-        """Adds a professor and triggers auto-save."""
         self.professors[professor.prof_id] = professor
         self.save_all_data()
 
     def add_course(self, course):
-        """Adds a course and triggers auto-save."""
         self.courses[course.course_code] = course
         self.save_all_data()
 
     def save_all_data(self):
-        """Saves all records to CSV files automatically.
-        
-        Fulfills both Data Handling and Exception Handling requirements.
-        """
         try:
-            # Save Students (Grades saved as CS101:85|CS102:90)
+            
             with open(self.students_file, mode='w', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(['ID', 'Name', 'Major', 'EnrolledCourses', 'Grades'])
@@ -55,14 +39,12 @@ class Department:
                     grades_str = "|".join([f"{c}:{g}" for c, g in s.grades.items()])
                     writer.writerow([s.student_id, s.name, s.major, ",".join(s.enrolled_courses), grades_str])
 
-            # Save Professors
             with open(self.professors_file, mode='w', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(['ID', 'Name', 'Specialization', 'CoursesTaught'])
                 for p in self.professors.values():
                     writer.writerow([p.prof_id, p.name, p.specialization, ",".join(p.courses_taught)])
 
-            # Save Courses
             with open(self.courses_file, mode='w', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(['Code', 'Title', 'Capacity', 'ProfID', 'Students'])
@@ -73,9 +55,8 @@ class Department:
             print(f"\n[System Error] Could not auto-save data: {error}")
 
     def load_all_data(self):
-        """Loads all records from CSV files on startup if they exist."""
         try:
-            # Load Courses first
+           
             if os.path.exists(self.courses_file):
                 with open(self.courses_file, mode='r', encoding='utf-8') as file:
                     reader = csv.DictReader(file)
@@ -87,7 +68,6 @@ class Department:
                             course.enrolled_students = students_data.split(',')
                         self.courses[course.course_code] = course
 
-            # Load Students
             if os.path.exists(self.students_file):
                 with open(self.students_file, mode='r', encoding='utf-8') as file:
                     reader = csv.DictReader(file)
@@ -107,7 +87,6 @@ class Department:
                                     
                         self.students[student.student_id] = student
 
-            # Load Professors
             if os.path.exists(self.professors_file):
                 with open(self.professors_file, mode='r', encoding='utf-8') as file:
                     reader = csv.DictReader(file)
@@ -124,7 +103,6 @@ class Department:
             print(f"\n[System Error] Could not load database files: {error}")
 
     def display_all_records(self):
-        """Displays a comprehensive summary and detailed view of all records."""
         print("\n" + "=" * 50)
         print(f" {self.dept_name.upper()} DEPARTMENT DATABASE")
         print("=" * 50)
@@ -133,8 +111,7 @@ class Department:
         print(f"Total Faculty:    {len(self.professors)}")
         print(f"Total Courses:    {len(self.courses)}")
         print("=" * 50)
-        
-        # 1. Courses
+    
         print("\n[ COURSES ]")
         if not self.courses:
             print("  No courses registered.")
@@ -148,7 +125,6 @@ class Department:
             print(f"    Capacity:   {course.capacity}")
             print()
 
-        # 2. Students
         print("[ STUDENTS ]")
         if not self.students:
             print("  No students registered.")
@@ -163,7 +139,6 @@ class Department:
                 print(f"    Avg GPA:  {student.calculate_gpa():.1f}%")
             print()
 
-        # 3. Professors
         print("[ PROFESSORS ]")
         if not self.professors:
             print("  No professors registered.")
